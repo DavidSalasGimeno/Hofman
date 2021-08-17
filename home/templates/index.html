@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	
+	
+	
+	
+</head>
+<body>
+	<audio autoplay loop>
+		<source src="{% static 'audio/rainf.mp3' %}"> 
+	</audio>
+	
+
+	
+	
+	<div class="fullscreen-bg" style = "{% if cookies is False %} filter:blur(40px); {% endif %} ">
+		<video loop muted autoplay poster="{% static 'img/8.jpg' %}" class="fullscreen-video">
+			
+			<source src="{% static 'video/bg.mp4' %}" type="video/mp4">
+			
+			
+		</video>
+		
+		
+		
+		
+	</div>
+
+	
+	{% if cookies is False %}
+	
+		<div class="welcome_box">
+
+			<h1>Welcome To Hofman</h1>
+			<p>This game is based on the DLC of Resident Evil 7 called: "21". </p>
+			<p>If you don't know how to play you can check the rules clicking the button in the home page. </p>
+			<p>I encurage you to sing up in the home page to save your progres and your trophies. </p>
+			<p>By pressing the following button you are acepting the use of cookies for a beter expirence in the game</p>
+			<form action="/" method="POST">{% csrf_token %}
+				<input type="submit" name="aceptCookies" value="Acept & Continue">
+			</form>
+		</div>
+
+	{% else %}
+		<div class="box">
+		<h1 >Hofman </h1>
+
+		{% if wantToPlay is False %}
+			<form action="/" method="POST">{% csrf_token %}
+					{% if userIsLogin %}
+						<input  id="playBtn" type="submit" name="wantToPlay" value="Create New Game">
+						<input  id="playBtn" type="submit" name="loadGame" value="Load Game">
+						<input  type="submit" name="rules" value="Rules">
+						<input  type="submit" name="help" value="Help">
+					{% else %}
+						<input  type="submit" name="logIn" value="Log in">
+						<input  type="submit" name="singUp" value="Sing Up">
+						<input  id="playBtn" type="submit" name="wantToPlay" value="Play">
+						<input  type="submit" name="rules" value="Rules">
+						<input  type="submit" name="help" value="Help">
+					{% endif %}
+			</form>
+		{% else %}
+			
+			{% if gameMode is False %}
+				<form action="/" method="POST">{% csrf_token %}
+					<h3>Choose game mode:</h3>
+					
+					<input  type="submit" name="fingers" value="Fingers">
+					<input type="submit" name="electricity" value="Electricity">
+					<input type="submit" name="goHome" value="Go Back">
+					
+				</form>
+
+			{% elif difficulty is False %}
+				<form action="/" method="POST">{% csrf_token %}
+
+					
+					<h3>Choose dificulty: </h3>
+						<input  type="submit" name="easy" value="Easy">
+						<input type="submit" name="medium" value="Medium">
+						<input type="submit" name="hard" value="Hard">
+						<input type="submit" name="goBackSelectGameMode" value="Go Back">
+
+				</form>
+		
+			
+			{% elif gameMode and difficulty %}
+			<p style="color: white;">{{ gameMode }} &nbsp; {{ difficulty }} </p>
+				<form action="/" method="POST">{% csrf_token %}
+					<input type="submit" name="startGame" value="Start Game">
+					<input type="submit" name="goBackSelectDifficulty" value="Go Back">
+				</form>
+			{% endif %}
+		{% endif %}	
+
+			
+				
+			
+		</div>	
+	
+	{% endif %}
+</body>
+</html>
